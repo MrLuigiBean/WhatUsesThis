@@ -126,7 +126,7 @@ namespace UnityEngine
 		}
 
 		[MenuItem( "Assets/What does this use?" )]
-		private static void FincChildAssets()
+		private static void FindChildAssets()
 		{
 			int iCount = 0;
 
