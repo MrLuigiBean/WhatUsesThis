@@ -25,29 +25,29 @@ namespace UnityEngine
 
 				var allAssets = AssetDatabase.FindAssets( "" ).Select( x => AssetDatabase.GUIDToAssetPath( x ) ).Distinct().ToArray();
 
-				var dependancies = new Dictionary<string, string[]>();
+				var dependencies = new Dictionary<string, string[]>();
 
 				var i = 0;
 				foreach ( var asset in allAssets )
 				{
-					dependancies[asset] = AssetDatabase.GetDependencies( asset, false );
+					dependencies[asset] = AssetDatabase.GetDependencies( asset, false );
 					i++;
 
-					if ( i%100 == 0 && EditorUtility.DisplayCancelableProgressBar( "WhatUsesThis", $"Getting Dependancies [{i}/{allAssets.Length}]", i / (float)allAssets.Length ) )
+					if ( i%100 == 0 && EditorUtility.DisplayCancelableProgressBar( "WhatUsesThis", $"Getting Dependencies [{i}/{allAssets.Length}]", i / (float)allAssets.Length ) )
 						return new Dictionary<string, List<string>>();
 				}
 
-				EditorUtility.DisplayProgressBar( "WhatUsesThis", "Building Dependants", 0.9f );
+				EditorUtility.DisplayProgressBar( "WhatUsesThis", "Building Dependents", 0.9f );
 
 				_dict = new Dictionary<string, List<string>>();
-				foreach ( var d in dependancies )
+				foreach ( var d in dependencies )
 				{
-					foreach ( var dependant in d.Value )
+					foreach ( var dependent in d.Value )
 					{
-						if ( !_dict.TryGetValue( dependant, out var list ) )
+						if ( !_dict.TryGetValue( dependent, out var list ) )
 						{
 							list = new List<string>();
-							_dict[dependant] = list;
+							_dict[dependent] = list;
 						}
 
 						list.Add( d.Key );
@@ -112,9 +112,9 @@ namespace UnityEngine
 
 				Debug.Log( $"<color=#5C93B9>What uses <b>{selected}</b>?</color>", selectedObj );
 
-				if ( Dict.TryGetValue( selected, out var dependants ) )
+				if ( Dict.TryGetValue( selected, out var dependents ) )
 				{
-					foreach ( var d in dependants )
+					foreach ( var d in dependents )
 					{
 						Debug.Log( $"<color=#8CA166>  {d}</color>", AssetDatabase.LoadAssetAtPath<Object>( d ) );
 						iCount++;
